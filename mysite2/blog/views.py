@@ -57,8 +57,6 @@ def user_login(request):
     :return:
     '''
 
-
-
     if request.method == 'GET':
         return render(request, "blog/login.html", {})
         # 登录成功后跳转的下一个路径
@@ -74,18 +72,25 @@ def user_login(request):
         userpass = request.POST['userpass']
         # next_url = request.POST['next_url'] # 跳转的下一个路径
         # print("路径2：%s" % next_url)
-
         # 验证账号密码是否正确
-        user_name=User.objects.filter(username=username).first()
-        if not user_name:
+        user_name = authenticate(request, username=username, password=userpass)
+        # user_name=User.objects.get(username=username)
+        if  user_name is not None:
+            # 记录登录状态，跳转页面
+            login(request,user_name)
+            request.session['login_user'] = user_name
+            author = models.Author(user=user_name)
+            author.save()
+            return redirect(reverse("blog:index",kwargs={'index':'1'}))
+        else:
             return  render(request, "blog/login.html", {"error_msg":'账号不存在'})
-        if not check_password(userpass,user_name.password):
-            return  render(request, "blog/login.html", {"error_msg":'密码错误'})
+        # if not check_password(userpass,user_name.password):
+        #     return  render(request, "blog/login.html", {"error_msg":'密码错误'})
         # 登录成功
-        request.session['login_user'] = user_name
-        author = models.Author(user=user_name)
-        author.save()
-        return redirect(reverse("blog:index",kwargs={'index':'1'}))
+        # request.session['login_user'] = user_name
+        # author = models.Author(user=user_name)
+        # author.save()
+        # return redirect(reverse("blog:index",kwargs={'index':'1'}))
         # return redirect(next_url)
        # -------------------第一种方法  走不通----------------------
         # try:
