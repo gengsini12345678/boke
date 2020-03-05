@@ -1,0 +1,45 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<div class="panel-heading">精英战用户登录</div>
+<div class="panel-body">
+    <div class="col-md-8 col-md-offset-2">
+        <form class="form-horizontal" method="POST" action="{% url 'blog:reset_psw' %}">
+            <div class="form-group">
+                <label for="username" class="col-sm-3 control-label">登录账号</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="请输入登录账号">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="userpass" class="col-sm-3 control-label">初始密码</label>
+                <div class="col-sm-9">
+                    <input type="password" class="form-control" id="userpass" name="userpass" placeholder="请输入初始密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="new_pass" class="col-sm-3 control-label">新密码</label>
+                <div class="col-sm-9">
+                    <input type="password" class="form-control" id="new_pass" name="new_pass" placeholder="请输入新密码">
+                </div>
+            </div>
+            {% if error_msg %}
+            <div class="form-group">
+                <label class="col-sm-3 control-label">提示信息</label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">{{error_msg}}</p>
+                </div>
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-danger">修改密码</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

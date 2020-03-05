@@ -1,0 +1,63 @@
+{% extends 'blog/base.html' %}
+
+
+{% block content %}
+<div class="panel-heading">博客文章列表</div>
+<table class="table table-striped table-hover">
+    <tr>
+        <th>文章标题</th>
+        <th>作者</th>
+        <th>内容摘要</th>
+        <th>阅读量</th>
+        <th>操作</th>
+    </tr>
+    {% for article in page %}
+    <tr>
+        <td>{{article.title}}</td>
+        <td>{{article.author.realname}}</td>
+        <td>{{article.content | truncatechars:7 }}</td>
+        <td><span class="badge">{{article.count}}</span></td>
+        <td>
+            <a href="{% url 'blog:article_details' article.id %}">查看</a>|
+            <a href="{% url 'blog:xiuGai_article' article.id %}">修改</a>|
+            <a href="#" class="delete"  articleid="{{article.id}}">删除</a>
+
+        </td>
+
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">这里的用户很懒，都没有发表过文章</td>
+    </tr>
+    {% endfor %}
+
+</table>
+<nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page.has_previous %}
+            <li>
+                <a href="{% url 'blog:articlelist' page.previous_page_number %}" aria-label="Previous">
+                    &laquo;
+                </a>
+            </li>
+            {% endif %}
+
+            {% for pindex in page.paginator.page_range %}
+            <li><a href="{% url 'blog:articlelist' pindex %}">{{pindex}}</a></li>
+            {% endfor %}
+
+            {% if page.has_next %}
+            <li>
+                <a href="{% url 'blog:articlelist' page.next_page_number %}" aria-label="Next">
+                    &raquo;
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+
+
+
+{% endblock %}
+

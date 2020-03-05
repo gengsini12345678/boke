@@ -1,0 +1,31 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="panel-heading">信息展示</div>
+<div class="panel-body">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <form method="POST" action="{% url 'blog:article_publish' %}">
+                <div class="form-group">
+                    <label for="title">文章标题</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="请输入文章标题">
+                </div>
+                <div class="form-group">
+                    <label for="content">文章内容</label>
+
+
+
+                    <textarea  class="form-control" id="content" name="content" rows="12" placeholder="请编辑文章内容"></textarea>
+                </div>
+                <!--<div class="form-group">-->
+                    <!--<label for="exampleInputFile">File input</label>-->
+                    <!--<input type="file" id="exampleInputFile">-->
+                    <!--<p class="help-block">Example block-level help text here.</p>-->
+                <!--</div>-->
+
+                <button type="submit" class="btn btn-primary">发表文章</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

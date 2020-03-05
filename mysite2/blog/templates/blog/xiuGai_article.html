@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="panel-heading">修改文章</div>
+<div class="panel-body">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <form method="POST" action="{% url 'blog:xiuGai_article' alist.id %}">
+                <div class="form-group">
+                    <label for="title">文章标题</label>
+                    <input type="text" value={{alist.title}} class="form-control" id="title" name="title">
+                </div>
+                <div class="form-group">
+                    <label for="content">文章内容</label>
+                    <textarea  class="form-control" id="content" name="content" rows="12" >{{alist.content}}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">修改文章</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
