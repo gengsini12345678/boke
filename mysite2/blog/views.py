@@ -20,6 +20,8 @@ from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 from . import models, utils
 
+from . import forms
+
 # Create your views here.
 
 def index(request,index):
@@ -57,8 +59,10 @@ def user_login(request):
     :return:
     '''
 
+    form = forms.CustomerForm()
+
     if request.method == 'GET':
-        return render(request, "blog/login.html", {})
+        return render(request, "blog/login.html", {"form":form,"error":""})
         # 登录成功后跳转的下一个路径
 
         # try:
@@ -67,23 +71,61 @@ def user_login(request):
         #     next_url = "/"
 
     elif request.method == 'POST':
+
         # 获取账号和密码
-        username = request.POST['username']
-        userpass = request.POST['userpass']
+        # username = request.POST['username']
+        # userpass = request.POST['userpass']
         # next_url = request.POST['next_url'] # 跳转的下一个路径
         # print("路径2：%s" % next_url)
         # 验证账号密码是否正确
-        user_name = authenticate(request, username=username, password=userpass)
-        # user_name=User.objects.get(username=username)
-        if  user_name is not None:
-            # 记录登录状态，跳转页面
-            login(request,user_name)
-            request.session['login_user'] = user_name
-            author = models.Author(user=user_name)
-            author.save()
-            return redirect(reverse("blog:index",kwargs={'index':'1'}))
-        else:
-            return  render(request, "blog/login.html", {"error_msg":'账号不存在'})
+        # 获取数据
+
+        # if form.is_valid():
+        #     print(form.changed_data)
+        # 获取数据
+        form = forms.CustomerForm(request.POST)
+        print(form.is_valid())
+
+        if form.is_valid():
+            username  = form.cleaned_data['username']
+            password  = form.cleaned_data['userpass']
+            print("账号：%s" % username)
+            print("密码：%s" % password)
+
+            user = authenticate(request, username=username, password=password)
+            if  user is not None:
+                # 记录登录状态，跳转页面
+                login(request,user)
+                request.session['login_user'] = user
+                author = models.Author(user=user)
+                author.save()
+                return redirect(reverse("blog:index",kwargs={'index':'1'}))
+            else:
+                return  render(request, "blog/login.html", {"form":form,"error_msg":'账号不存在'})
+
+
+
+
+        if form.cleaned_data['userpass'] != "123":
+            return render(request, "blog/login.html", {"form":form,"error":"账号或密码错误"})
+
+
+
+        # -------------原始方法------------
+        # user_name = authenticate(request, username=username, password=userpass)
+        # # user_name=User.objects.get(username=username)
+        # if  user_name is not None:
+        #     # 记录登录状态，跳转页面
+        #     login(request,user_name)
+        #     request.session['login_user'] = user_name
+        #     author = models.Author(user=user_name)
+        #     author.save()
+        #     return redirect(reverse("blog:index",kwargs={'index':'1'}))
+        # else:
+        #     return  render(request, "blog/login.html", {"error_msg":'账号不存在'})
+
+
+        # -------------原始方法------------
         # if not check_password(userpass,user_name.password):
         #     return  render(request, "blog/login.html", {"error_msg":'密码错误'})
         # 登录成功
