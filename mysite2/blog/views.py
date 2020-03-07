@@ -58,9 +58,7 @@ def user_login(request):
     :param request:
     :return:
     '''
-
     form = forms.CustomerForm()
-
     if request.method == 'GET':
         return render(request, "blog/login.html", {"form":form,"error":""})
         # 登录成功后跳转的下一个路径
@@ -102,14 +100,6 @@ def user_login(request):
                 return redirect(reverse("blog:index",kwargs={'index':'1'}))
             else:
                 return  render(request, "blog/login.html", {"form":form,"error_msg":'账号不存在'})
-
-
-
-
-        if form.cleaned_data['userpass'] != "123":
-            return render(request, "blog/login.html", {"form":form,"error":"账号或密码错误"})
-
-
 
         # -------------原始方法------------
         # user_name = authenticate(request, username=username, password=userpass)
